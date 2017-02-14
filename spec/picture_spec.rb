@@ -29,13 +29,13 @@ RSpec.describe Picture do
   describe "#thumb_url" do
     it "returns the URL to the thumb, based on the filename" do
       picture = Picture.new(file: Pathname.new("foo/bar/blah.jpg"))
-      expect(picture.thumb_url("/images").to_s).to eq("/images/foo/bar/thumbs/blah.jpg")
+      expect(picture.thumb_url("/images").to_s).to eq("/images/thumbs/blah.jpg")
     end
   end
   describe "#url" do
     it "returns the URL to file, based on the filename" do
       picture = Picture.new(file: Pathname.new("foo/bar/blah.jpg"))
-      expect(picture.url("/images").to_s).to eq("/images/foo/bar/blah.jpg")
+      expect(picture.url("/images").to_s).to eq("/images/blah.jpg")
     end
   end
 end

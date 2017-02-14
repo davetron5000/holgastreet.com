@@ -1,5 +1,6 @@
 require "immutable-struct"
 require_relative "picture_url"
+require_relative "thumbnail"
 
 Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long, :taken_on) do
   def coordinate
@@ -18,11 +19,15 @@ Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long
   end
 
   def thumb_url(base_url)
-    PictureUrl.new(base_url,file.parent / "thumbs" / file.basename)
+    thumbnail.url(base_url)
   end
 
   def url(base_url)
-    PictureUrl.new(base_url,file)
+    PictureUrl.new(base_url,file.basename)
+  end
+
+  def thumbnail
+    @thumbnail ||= Thumbnail.new(self)
   end
 end
 

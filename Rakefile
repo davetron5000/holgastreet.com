@@ -55,7 +55,7 @@ task :build do
                long: LatLong.from_exif(json["GPSLongitude"]),
            taken_on: ExifTime.parse(json["CreateDate"]))
 
-      puts picture.taken_on
+      puts picture.url("/images")
     else
       raise _stderr
     end

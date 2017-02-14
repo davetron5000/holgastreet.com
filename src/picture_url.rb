@@ -5,10 +5,9 @@ class PictureUrl
   end
 
   def to_s
-    "%{base}/%{dir}/%{file}" % {
+    "%{base}/%{file}" % {
       base: @base_url,
-      dir: @file_pathname.parent,
-      file: @file_pathname.basename
+      file: @file_pathname.to_s
     }
   end
   alias :to_str :to_s
