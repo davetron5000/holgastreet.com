@@ -1,13 +1,30 @@
 require "immutable-struct"
-require_relative "picture_url"
 require_relative "thumbnail"
+require_relative "lat_long"
+require_relative "exif_time"
 
 Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long, :taken_on) do
+  def self.in_file_from_exif_data(file:, exif_data: )
+    self.new(
+      file: file,
+      iso: exif_data["ISO"],
+      film_type: exif_data["Make"],
+      description: exif_data["Description"],
+      lat: LatLong.from_exif(exif_data["GPSLatitude"]),
+      long: LatLong.from_exif(exif_data["GPSLongitude"]),
+      taken_on: ExifTime.parse(exif_data["CreateDate"])
+    )
+  end
+
+  def taken_on_pretty
+    taken_on.strftime("%B %e, %Y")
+  end
+
   def coordinate
     if lat.nil? || long.nil?
       nil
     else
-      [lat.to_f,long.to_f]
+      OpenStruct.new(lat: lat.to_f, long: long.to_f)
     end
   end
 
@@ -18,12 +35,12 @@ Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long
     }
   end
 
-  def thumb_url(base_url)
-    thumbnail.url(base_url)
+  def thumb_url
+    thumbnail.url
   end
 
-  def url(base_url)
-    PictureUrl.new(base_url,file.basename)
+  def url
+    file.basename
   end
 
   def thumbnail

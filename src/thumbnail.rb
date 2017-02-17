@@ -6,8 +6,8 @@ class Thumbnail
     @picture = picture
   end
 
-  def url(base_url)
-    PictureUrl.new(base_url,"thumbs/#{@picture.file.basename}")
+  def url
+    "thumbs/#{@picture.file.basename}"
   end
 
   def generate!

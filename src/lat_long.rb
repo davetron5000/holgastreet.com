@@ -13,17 +13,17 @@ class LatLong
     @degrees   = degrees.to_f
     @minutes   = minutes.to_f
     @seconds   = seconds.to_f
-    @direction = direction.upcase
+    @direction = direction.strip.upcase
   end
 
   def to_f
-    sign = if (@direction == "W") || (@direction = "S")
+    sign = if (@direction == "W") || (@direction == "S")
              -1
            else
              1
            end
 
-    @degrees + (@minutes / 60) + (@seconds / 60 / 60)
+    sign * (@degrees + (@minutes / 60) + (@seconds / 60 / 60))
   end
 end
 

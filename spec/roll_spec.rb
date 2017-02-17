@@ -1,12 +1,17 @@
 require "spec_helper"
 require "date"
-require_relative "../src/contact_sheet"
+require_relative "../src/roll"
+require_relative "../src/picture"
 
-RSpec.describe ContactSheet do
-  describe "#name" do
+RSpec.describe Roll do
+  describe "#pretty_name" do
     it "pretty-prints the date" do
-      contact_sheet = ContactSheet.new(date: Date.parse("2017-01-03"))
-      expect(contact_sheet.name).to eq("January  3, 2017")
+      contact_sheet = Roll.new(name: "2017-01-03")
+      expect(contact_sheet.pretty_name).to eq("January  3, 2017")
+    end
+    it "handles a non-date name" do
+      contact_sheet = Roll.new(name: "foo")
+      expect(contact_sheet.pretty_name).to eq("foo")
     end
   end
 
@@ -21,7 +26,7 @@ RSpec.describe ContactSheet do
         Picture.new(file: Pathname.new("foo6.jpg")),
         Picture.new(file: Pathname.new("foo7.jpg")),
       ]
-      sleeves = ContactSheet.new(pictures: pictures).sleeves
+      sleeves = Roll.new(pictures: pictures).sleeves
       expect(sleeves.size).to eq(3)
       expect(sleeves[0].pictures.size).to eq(3)
       expect(sleeves[1].pictures.size).to eq(3)
@@ -39,7 +44,7 @@ RSpec.describe ContactSheet do
         Picture.new(file: Pathname.new("foo7.jpg")),
       ]
 
-      sleeves = ContactSheet.new(pictures: pictures.shuffle).sleeves
+      sleeves = Roll.new(pictures: pictures.shuffle).sleeves
 
       expect(sleeves[0].pictures).to eq(pictures[0..2])
       expect(sleeves[1].pictures).to eq(pictures[3..5])

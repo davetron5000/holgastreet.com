@@ -1,10 +1,12 @@
 require "immutable-struct"
 require_relative "./sleeve"
 
-ContactSheet = ImmutableStruct.new(:date, [:pictures]) do
+Roll = ImmutableStruct.new(:name, [:pictures]) do
 
-  def name
-    date.strftime("%B %e, %Y")
+  def pretty_name
+    Date.parse(name).strftime("%B %e, %Y")
+  rescue
+    name
   end
 
   def sleeves

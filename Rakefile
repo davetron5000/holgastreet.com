@@ -1,45 +1,44 @@
 $: << File.join(Dir.pwd,"src")
-require 'pathname'
-require 'json'
-require 'open3'
-require 'picture'
-require 'exif_time'
-require 'lat_long'
+require 'site'
+require 'rspec/core/rake_task'
 
-include FileUtils
-
-image_dirs = Pathname.new("images/holgastreet")
-
-images_and_thumbs = image_dirs.each_child.select(&:directory?).map { |image_dir|
-  image_dir.each_child.reject(&:directory?).select { |image|
-    [".jpg",".jpeg"].include?(image.extname.downcase)
-  }.map { |image|
-    [image,image.parent / 'thumbs' / image.basename]
-  }
-}.flatten(1)
-
-images_and_thumbs.each do |full_size,thumb|
-  #desc "Make thumb for #{full_size}" # useful to debug this
-  file thumb => full_size do
-    mkdir_p thumb.parent
-    chdir full_size.parent do
-      command = "convert -format png #{full_size.basename} -thumbnail 600x600 thumbs/#{full_size.basename}"
-      sh command do |ok,res|
-        unless ok
-          fail "Couldn't execute '#{command}': #{res.inspect}"
-        end
-      end
-    end
-
-  end
+task :site do
+  Site.new.build!
 end
+RSpec::Core::RakeTask.new(:spec)
 
-desc "Create thumbnails"
-task :thumbs => images_and_thumbs.map {|_| _[1] }
-
-task :default => :thumbs do
-end
-
+#image_dirs = Pathname.new("images/holgastreet")
+#
+#images_and_thumbs = image_dirs.each_child.select(&:directory?).map { |image_dir|
+#  image_dir.each_child.reject(&:directory?).select { |image|
+#    [".jpg",".jpeg"].include?(image.extname.downcase)
+#  }.map { |image|
+#    [image,image.parent / 'thumbs' / image.basename]
+#  }
+#}.flatten(1)
+#
+#images_and_thumbs.each do |full_size,thumb|
+#  #desc "Make thumb for #{full_size}" # useful to debug this
+#  file thumb => full_size do
+#    mkdir_p thumb.parent
+#    chdir full_size.parent do
+#      command = "convert -format png #{full_size.basename} -thumbnail 600x600 thumbs/#{full_size.basename}"
+#      sh command do |ok,res|
+#        unless ok
+#          fail "Couldn't execute '#{command}': #{res.inspect}"
+#        end
+#      end
+#    end
+#
+#  end
+#end
+#
+#desc "Create thumbnails"
+#task :thumbs => images_and_thumbs.map {|_| _[1] }
+#
+#task :default => :thumbs do
+#end
+#
 task :build do
   Dir["original_images/*.jpg"].each do |image_filename|
     stdout,_stderr,status = Open3.capture3("exiftool -json #{image_filename}")
