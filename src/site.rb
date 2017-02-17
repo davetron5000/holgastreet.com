@@ -2,16 +2,16 @@ require 'pathname'
 require 'fileutils'
 require_relative "original_image"
 require_relative "picture"
-require_relative "index"
-require_relative "photo"
 require_relative "roll"
+require_relative "template_models"
 
 class Site
   include FileUtils
 
   def initialize
     @original_image_dir = Pathname.new(Dir.pwd) / "original_images"
-    @images_dir = Pathname.new(Dir.pwd) / "images" / "holgastreet"
+    @images_dir = Pathname.new(Dir.pwd) / "site" / "images" / "holgastreet"
+    @templates_dir = Pathname.new(Dir.pwd) / "templates"
   end
 
   def build!
@@ -54,7 +54,9 @@ private
     info "Creating site/index.html"
     mkdir_p "site"
     File.open("site/index.html","w") do |file|
-      file.puts Index.new(rolls).render
+      index_template = TemplateModels::Index.new(rolls)
+      index_template.template_file = @templates_dir / "index.mustache"
+      file.puts index_template.render
     end
     info "Creating photo pages"
     rolls.each do |roll|
@@ -62,7 +64,9 @@ private
         path = Pathname("site") / "photos" / (picture.slug + ".html")
         mkdir_p path.parent
         File.open(path,"w") do |file|
-          file.puts Photo.new(roll,picture).render
+          template = TemplateModels::Photo.new(roll,picture)
+          template.template_file = @templates_dir / "photo.mustache"
+          file.puts template.render
         end
       end
     end

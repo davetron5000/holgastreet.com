@@ -21,6 +21,13 @@ RSpec.describe Picture do
     end
   end
 
+  describe "#taken_on_pretty" do
+    it "renders the date nicely" do
+      picture = Picture.new(taken_on: Date.parse("2016-03-06"))
+      expect(picture.taken_on_pretty).to eq("March  6, 2016")
+    end
+  end
+
   describe "#slug" do
     it "returns a slug using the date and filename" do
       picture = Picture.new(taken_on: Date.parse("2016-03-02"), file: Pathname.new("foo.jpg"))

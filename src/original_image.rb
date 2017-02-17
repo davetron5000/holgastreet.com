@@ -1,6 +1,7 @@
 require 'pathname'
 require 'open3'
 require 'json'
+require_relative 'picture'
 
 class OriginalImage
   attr_reader :path
@@ -9,10 +10,17 @@ class OriginalImage
   end
 
   def picture(dest_dir)
-    @picture ||= Picture.in_file_from_exif_data(file: dest_dir / roll_name / path.basename, exif_data: exif_data)
+    dest_dir = Pathname(dest_dir)
+    file_dir = dest_dir / roll_name
+    @picture ||= Picture.in_file_from_exif_data(file: file_dir / path.basename, exif_data: exif_data)
   end
 
-  def roll_name(default: nil)
+  def roll_name(default: :raise)
+    default_proc = if default == :raise
+                     ->(keywords) { raise "No roll found in keywords: '#{keywords.join(',')}'" }
+                   else
+                     ->(*) { default }
+                   end
     @roll_name ||= begin
                        keywords = exif_data["Keywords"]
                        keywords = keywords.to_s.split(/,/) unless keywords.kind_of?(Array)
@@ -20,7 +28,7 @@ class OriginalImage
                          keyword =~ /^roll:/
                        }.map { |roll_keywords|
                          roll_keywords.split(/:/,2)[1]
-                       }.first or default
+                       }.first or default_proc.(keywords)
                    end
   end
 

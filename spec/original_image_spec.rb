@@ -2,11 +2,27 @@ require "spec_helper"
 require_relative "../src/original_image"
 
 RSpec.describe OriginalImage do
+  let(:test_picture_path) {
+    here = File.join(Dir.pwd,"spec","images")
+    File.join(here,"test.jpg")
+  }
+  describe "#picture" do
+    before do
+      unless system("exiftool -Keywords=\"roll:2014-01-02\" -Keywords=foo -Keywords=bar #{test_picture_path} >/dev/null")
+        raise "Problem setting keywords"
+      end
+    end
+    it "creates a picture passing through the exif data" do
+      picture = instance_double(Picture)
+      allow(Picture).to receive(:in_file_from_exif_data).and_return(picture)
+
+      original_image = OriginalImage.new(test_picture_path)
+      result = original_image.picture("/foo")
+      expect(Picture).to have_received(:in_file_from_exif_data).with(file: Pathname("/foo/2014-01-02/test.jpg"), exif_data: instance_of(Hash))
+
+    end
+  end
   describe "#roll_name" do
-    let(:test_picture_path) {
-      here = File.join(Dir.pwd,"spec","images")
-      File.join(here,"test.jpg")
-    }
     context "when there is a roll name" do
       before do
         unless system("exiftool -Keywords=\"roll:2014-01-02\" -Keywords=foo -Keywords=bar #{test_picture_path} >/dev/null")
@@ -26,9 +42,11 @@ RSpec.describe OriginalImage do
         end
       end
 
-      it "returns nil" do
+      it "returns blows up" do
         original_image = OriginalImage.new(test_picture_path)
-        expect(original_image.roll_name).to be_nil
+        expect {
+          original_image.roll_name
+        }.to raise_error(/No roll found in keywords: 'foo,bar'/i)
       end
 
       it "returns nil a default if asked" do
