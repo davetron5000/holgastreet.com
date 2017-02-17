@@ -4,43 +4,29 @@ require_relative "original_image"
 require_relative "picture"
 require_relative "roll"
 require_relative "template_models"
+require_relative "logging"
+require_relative "image_detector"
+require_relative "roll_directories_builder"
 
 class Site
   include FileUtils
+  include Logging
 
   def initialize
-    @original_image_dir = Pathname.new(Dir.pwd) / "original_images"
+    @image_detector = ImageDetector.new(Pathname.new(Dir.pwd) / "original_images")
     @images_dir = Pathname.new(Dir.pwd) / "site" / "images" / "holgastreet"
+    @roll_directories_builder = RollDirectoriesBuilder.new(@images_dir)
     @templates_dir = Pathname.new(Dir.pwd) / "templates"
   end
 
   def build!
-    images = detect_images
-    mk_roll_dirs(images.map(&:roll_name).uniq)
-    generate_site(images)
+    original_images = @image_detector.detect_images
+    @roll_directories_builder.build_roll_directories(original_images)
+    generate_site(original_images)
     deploy!
   end
 
 private
-
-  def detect_images
-    info "Detecting images..."
-    Dir[@original_image_dir / "*"].select { |file|
-      file =~ /\.jpg$/i || file =~ /.jpeg$/i
-    }.map  { |file|
-      debug "Detected #{file}"
-      OriginalImage.new(file)
-    }
-  end
-
-  def mk_roll_dirs(roll_dirs)
-    roll_dirs.map { |dir|
-      @images_dir / dir
-    }.each do |dir|
-      info "Creating roll dir #{dir}"
-      mkdir_p(dir)
-    end
-  end
 
   def generate_site(original_images)
     images_by_roll = original_images.group_by(&:roll_name).sort_by { |roll_name,_|
@@ -94,15 +80,4 @@ private
   def deploy!
   end
 
-  def info(message)
-    puts "🔵  #{message}"
-  end
-
-  def debug(message)
-    #puts "🐛  #{message}"
-  end
-
-  def cool(message)
-    #puts "✅  #{message}"
-  end
 end
