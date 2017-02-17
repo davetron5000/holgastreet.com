@@ -3,14 +3,14 @@
   <title> </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
-  <body class="bg-washed-blue gray sans-serif">
+  <body class="bg-washed-blue gray helvetica">
     <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
       <h1 class="mb2">Holgastreet,</h1>
       <h2 class="mt0 tracked fw1">Washington, DC</h2>
       <h3 class="mv1 f4 fw1">Real film, real (crappy) camera.</h3>
       <nav class="mt2 f6 fw6 ttu tracked pt2 bt tc b--gray">
-        <a class="link dim white dib mr3" href="#" title="About">About</a>
-        <a class="link dim white dib" href="#" title="Contact">Contact</a>
+        <a class="link dim white dib mr3" href="about.html" title="About">About</a>
+        <a class="link dim white dib" href="https://instagram.com/holgastreet" title="Contact">Contact</a>
       </nav>
     </header>
     {{#rolls}}
@@ -20,8 +20,8 @@
           <div class="cf">
             {{#pictures}}
               <div class="fl w-third pa2">
-                <a href="photos/{{slug}}.html">
-                  <img src="images/holgastreet/{{name}}/{{ thumb_url }}" class="w-100">
+                <a href="/photos/{{slug}}.html">
+                  <img src="/images/holgastreet/{{name}}/{{ thumb_url }}" class="w-100">
                 </a>
               </div>
             {{/pictures}}

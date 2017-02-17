@@ -44,6 +44,11 @@ private
       index_template.template_file = @templates_dir / "index.mustache"
       file.puts index_template.render
     end
+    File.open("site/about.html","w") do |file|
+      about_template = TemplateModels::About.new
+      about_template.template_file = @templates_dir / "about.mustache"
+      file.puts about_template.render
+    end
     info "Creating photo pages"
     rolls.each do |roll|
       roll.pictures.each do |picture|
