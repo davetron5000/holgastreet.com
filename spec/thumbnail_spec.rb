@@ -7,7 +7,7 @@ RSpec.describe Thumbnail do
     it "inserts /thumbs/ into the picture's url" do
       picture = Picture.new(file: Pathname.new("foo/bar.jpg"))
       thumbnail = Thumbnail.new(picture)
-      expect(thumbnail.url("/images").to_s).to eq("/images/thumbs/bar.jpg")
+      expect(thumbnail.url.to_s).to eq("thumbs/bar.jpg")
     end
   end
 

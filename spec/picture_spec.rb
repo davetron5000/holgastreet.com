@@ -8,7 +8,8 @@ RSpec.describe Picture do
   describe "#coordinate" do
     it "returns a 2-elemenet typle" do
       picture = Picture.new(lat: 12.3, long: 4.5)
-      expect(picture.coordinate).to eq([12.3,4.5])
+      expect(picture.coordinate.lat).to eq(12.3)
+      expect(picture.coordinate.long).to eq(4.5)
     end
     it "returns nil if lat is nil" do
       picture = Picture.new(long: 4.5)
@@ -30,13 +31,13 @@ RSpec.describe Picture do
   describe "#thumb_url" do
     it "returns the URL to the thumb, based on the filename" do
       picture = Picture.new(file: Pathname.new("foo/bar/blah.jpg"))
-      expect(picture.thumb_url("/images").to_s).to eq("/images/thumbs/blah.jpg")
+      expect(picture.thumb_url.to_s).to eq("thumbs/blah.jpg")
     end
   end
   describe "#url" do
     it "returns the URL to file, based on the filename" do
       picture = Picture.new(file: Pathname.new("foo/bar/blah.jpg"))
-      expect(picture.url("/images").to_s).to eq("/images/blah.jpg")
+      expect(picture.url.to_s).to eq("blah.jpg")
     end
   end
 
