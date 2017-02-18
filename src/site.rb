@@ -17,6 +17,7 @@ class Site
     @images_dir = Pathname.new(Dir.pwd) / "site" / "images" / "holgastreet"
     @roll_directories_builder = RollDirectoriesBuilder.new(@images_dir)
     @templates_dir = Pathname.new(Dir.pwd) / "templates"
+    @roll_data_file = Pathname.new(Dir.pwd) / "rolls.json"
   end
 
   def build!
@@ -34,8 +35,11 @@ private
     }.reverse
     copy_images_and_generate_thumbs(images_by_roll)
     rolls = images_by_roll.map { |roll_name,images_in_roll|
-      Roll.new(name: roll_name,
-               pictures: images_in_roll.map { |image| image.picture(@images_dir) })
+      Roll.from_pictures_and_data(name: roll_name,
+                                  data_file: @roll_data_file,
+                                  pictures: images_in_roll.map { |image| image.picture(@images_dir) }).tap { |roll|
+                                    warn("No roll data for #{roll.name}") if roll.theme.nil? || roll.description.nil?
+                                  }
     }
     info "Creating site/index.html"
     mkdir_p "site"

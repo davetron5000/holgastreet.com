@@ -1,0 +1,19 @@
+{
+  "rolls":[
+    {
+      "name": "2017-02-05",
+      "theme": "Places I Love",
+      "description": "These are some of my favorite places in and around H Street, mostly restaurants.  Having moved from Logan Circle, I love the less-fussy more casual cuture out here."
+    },
+    {
+      "name": "2017-01-29",
+      "theme": "Changing Structures",
+      "description": "H Street seems to be under constant construction, with old places moving out, new ones coming up, and a lot of empty, but ready-to-use buildings."
+    },
+    {
+      "name":"2016-09-17",
+      "theme":"H Street Festival",
+      "description":"The annual H Street Festival!  I look forward to every year now :)"
+    }
+  ]
+}

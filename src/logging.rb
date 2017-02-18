@@ -3,6 +3,10 @@ module Logging
     puts "🔵  #{message}"
   end
 
+  def warn(message)
+      puts "⚠️  #{message}"
+  end
+
   def debug(message)
     #puts "🐛  #{message}"
   end
