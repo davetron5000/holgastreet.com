@@ -126,6 +126,7 @@ RSpec.describe Picture do
       expect(picture.taken_on).to eq(Date.parse("2017-02-09"))
       expect(picture.lat.to_f).to eq(38.89718888888889)
       expect(picture.long.to_f).to eq(-77.00228888888888)
+      expect(picture.title).to eq("Union Kitchen Grocery")
     end
   end
 end

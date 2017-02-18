@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <title> </title>
+  <title>Holgastreet - Pictures of the H St Neighborhood in Washington, D.C. </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+  <link rel="stylesheet" href="/css/tachyons.min.css">
   <body class="bg-washed-blue gray helvetica">
     <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
       <h1 class="mb2">Holgastreet,</h1>
@@ -21,7 +21,7 @@
             {{#pictures}}
               <div class="fl w-third pa2">
                 <a href="/photos/{{slug}}.html">
-                  <img src="/images/holgastreet/{{name}}/{{ thumb_url }}" class="w-100">
+                  <img alt="Small photo of {{title}}" src="/images/holgastreet/{{name}}/{{ thumb_url }}" class="w-100">
                 </a>
               </div>
             {{/pictures}}
@@ -29,5 +29,8 @@
         {{/sleeves}}
       </section>
       {{/rolls}}
+      <footer class="tc mv0 pt1 pb2 pl2 pr2 fw2">
+        Copyright David Copeland. See <a class="black fw4" href="about.html#license">the about page for license information</a>.
+      </footer>
   </body>
 </html>

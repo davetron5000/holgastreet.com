@@ -61,6 +61,9 @@ private
         end
       end
     end
+    info "Copying CSS"
+    mkdir_p "site/css"
+    cp "node_modules/tachyons/css/tachyons.min.css", "site/css"
   end
 
   def copy_images_and_generate_thumbs(images_by_roll)

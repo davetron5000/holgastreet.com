@@ -4,8 +4,11 @@ require_relative "lat_long"
 require_relative "lat_long_coordinate"
 require_relative "exif_time"
 
-Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long, :taken_on) do
+Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long, :taken_on, :title) do
   def self.in_file_from_exif_data(file:, exif_data: )
+    strip_to_nil = ->(string) {
+      string.to_s.strip == '' ? nil : string.strip
+    }
     self.new(
       file: file,
       iso: exif_data["ISO"],
@@ -13,7 +16,8 @@ Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long
       description: exif_data["Description"],
       lat: LatLongCoordinate.from_exif(exif_data["GPSLatitude"]),
       long: LatLongCoordinate.from_exif(exif_data["GPSLongitude"]),
-      taken_on: ExifTime.parse(exif_data["CreateDate"])
+      taken_on: ExifTime.parse(exif_data["CreateDate"]),
+      title: strip_to_nil.(exif_data["Title"]) || "Untitled"
     )
   end
 
