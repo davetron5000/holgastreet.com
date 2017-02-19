@@ -128,5 +128,18 @@ RSpec.describe Picture do
       expect(picture.long.to_f).to eq(-77.00228888888888)
       expect(picture.title).to eq("Union Kitchen Grocery")
     end
+
+    it "strips film_type 'EPSON' to nil because of reasons" do
+      file = Pathname.new("foo")
+      picture = Picture.in_file_from_exif_data(file: file, exif_data: exif_data.merge({ "Make" => "EPSON" }))
+      expect(picture.file).to eq(file)
+      expect(picture.iso).to eq(400)
+      expect(picture.film_type).to be_nil
+      expect(picture.description).to eq("I love coming to this place to see what they have and what inspires me.")
+      expect(picture.taken_on).to eq(Date.parse("2017-02-09"))
+      expect(picture.lat.to_f).to eq(38.89718888888889)
+      expect(picture.long.to_f).to eq(-77.00228888888888)
+      expect(picture.title).to eq("Union Kitchen Grocery")
+    end
   end
 end

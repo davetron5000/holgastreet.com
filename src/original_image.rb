@@ -12,7 +12,8 @@ class OriginalImage
   def picture(dest_dir)
     dest_dir = Pathname(dest_dir)
     file_dir = dest_dir / roll_name
-    @picture ||= Picture.in_file_from_exif_data(file: file_dir / path.basename, exif_data: exif_data)
+    clean_file_name = path.basename.to_s.gsub(/[\+\/\\\?\&]/,'')
+    @picture ||= Picture.in_file_from_exif_data(file: file_dir / clean_file_name, exif_data: exif_data)
   end
 
   def roll_name(default: :raise)

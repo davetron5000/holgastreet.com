@@ -6,13 +6,14 @@ require_relative "exif_time"
 
 Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long, :taken_on, :title) do
   def self.in_file_from_exif_data(file:, exif_data: )
-    strip_to_nil = ->(string) {
-      string.to_s.strip == '' ? nil : string.strip
+    strip_to_nil = ->(string,also_considered_nil=nil) {
+      nil_like_values = [ '', also_considered_nil ].compact
+      nil_like_values.include?(string.to_s.strip) ? nil : string.strip
     }
     self.new(
       file: file,
       iso: exif_data["ISO"],
-      film_type: exif_data["Make"],
+      film_type: strip_to_nil.(exif_data["Make"],'EPSON'),
       description: exif_data["Description"],
       lat: LatLongCoordinate.from_exif(exif_data["GPSLatitude"]),
       long: LatLongCoordinate.from_exif(exif_data["GPSLongitude"]),

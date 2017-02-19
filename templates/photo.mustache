@@ -19,7 +19,12 @@
               {{ description }}
             </p>
             <h1 class="f6 mb2 tc ttu tracked fwb near-black">{{ taken_on_pretty }}</h1>
-            <h2 class="f6 mb4 tc mt0 fw2">{{ film_type }} {{ iso }} ISO</h2>
+            <h2 class="f6 mb4 tc mt0 fw2">
+              {{ film_type }} 
+              {{#iso}}
+              {{ iso }} ISO
+              {{/iso}}
+            </h2>
           </div>
           <div class="fl w-25-ns dn"></div>
         </div>
@@ -50,7 +55,7 @@
       </div>
     </article>
     <footer class="tc mv0 pt1 pb2 pl2 pr2 fw2">
-      Copyright David Copeland. See <a class="black fw4" href="about.html#license">the about page for license information</a>.
+      Copyright David Copeland. See <a class="black fw4" href="/about.html#license">the about page for license information</a>.
     </footer>
   </body>
 </html>
