@@ -1,61 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-  <title> Holgastreet Photo: {{ title }} </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/css/tachyons.min.css">
-  <body class="bg-washed-blue gray helvetica">
-    <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
-      <h1 class="mb2"><a class="no-underline washed-blue" href="/">Holgastreet</a></h1>
-    </header>
-    <article class="pa0">
-      <a href="/images/holgastreet/{{ roll_name }}/{{ url }}">
-        <img alt="Photo of {{title}}" src="/images/holgastreet/{{ roll_name }}/{{ thumb_url }}" class="db center mw-100">
-      </a>
-      <div>
-        <div class="cf pa3-ns">
-          <div class="fl w-25-ns dn db-ns">&nbsp;</div>
-          <div class="fl w-50-ns w-100 pa3">
-            <p class="lh-copy mt1-ns mv0 f4">
-              {{ description }}
-            </p>
-            <h1 class="f6 mb2 tc ttu tracked fwb near-black">{{ taken_on_pretty }}</h1>
-            <h2 class="f6 mb4 tc mt0 fw2">
-              {{ film_type }} 
-              {{#iso}}
-              {{ iso }} ISO
-              {{/iso}}
-            </h2>
-          </div>
-          <div class="fl w-25-ns dn"></div>
+{{> templates/head }}
+  <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
+    <h1 class="mb2"><a class="no-underline washed-blue" href="/">Holgastreet</a></h1>
+  </header>
+  <article class="pa0">
+    <a href="/images/holgastreet/{{ roll_name }}/{{ url }}">
+      <img alt="Photo of {{title}}" src="/images/holgastreet/{{ roll_name }}/{{ thumb_url }}" class="db center mw-100">
+    </a>
+    <div>
+      <div class="cf pa3-ns">
+        <div class="fl w-25-ns dn db-ns">&nbsp;</div>
+        <div class="fl w-50-ns w-100 pa3">
+          <p class="lh-copy mt1-ns mv0 f4">
+            {{ description }}
+          </p>
+          <h1 class="f6 mb2 tc ttu tracked fwb near-black">{{ taken_on_pretty }}</h1>
+          <h2 class="f6 mb4 tc mt0 fw2">
+            {{ film_type }} 
+            {{#iso}}
+            {{ iso }} ISO
+            {{/iso}}
+          </h2>
         </div>
-        {{#coordinate}}
-        <footer>
-          <div class="w-100 h4 h5-ns" id="map"></div>
-        </footer>
-        <script>
-          function initMap() {
-            var point = {
-              lat: {{lat}},
-              lng: {{long}},
-            };
-            var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 15,
-              center: point,
-            });
-            var marker = new google.maps.Marker({
-              position: point,
-              map: map
-            });
-          }
-        </script>
-        <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcDUouwnBdn1Amvt-Suwtos4sunWkqc0s&callback=initMap">
-        </script>
-        {{/coordinate}}
+        <div class="fl w-25-ns dn"></div>
       </div>
-    </article>
-    <footer class="tc mv0 pt1 pb2 pl2 pr2 fw2">
-      Copyright David Copeland. See <a class="black fw4" href="/about.html#license">the about page for license information</a>.
-    </footer>
-  </body>
-</html>
+      {{#coordinate}}
+      <footer>
+        <div class="w-100 h4 h5-ns" id="map"></div>
+      </footer>
+      <script>
+        function initMap() {
+          var point = {
+            lat: {{lat}},
+            lng: {{long}},
+          };
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: point,
+          });
+          var marker = new google.maps.Marker({
+            position: point,
+            map: map
+          });
+        }
+      </script>
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcDUouwnBdn1Amvt-Suwtos4sunWkqc0s&callback=initMap">
+      </script>
+      {{/coordinate}}
+    </div>
+  </article>
+  <footer class="tc mv0 pt1 pb2 pl2 pr2 fw2">
+    Copyright David Copeland. See <a class="black fw4" href="/about.html#license">the about page for license information</a>.
+  </footer>
+{{> templates/tail }}

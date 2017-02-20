@@ -1,47 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-  <title>Holgastreet - Pictures of the H St Neighborhood in Washington, D.C. </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/css/tachyons.min.css">
-  <body class="bg-washed-blue gray helvetica">
-    <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
-      <h1 class="mb2">Holgastreet,</h1>
-      <h2 class="mt0 tracked fw1">Washington, DC</h2>
-      <h3 class="mv1 f4 fw1">Real film, real (crappy) camera.</h3>
-      <nav class="mt2 f6 fw6 ttu tracked pt2 bt tc b--gray">
-        <a class="link dim white dib mr3" href="/about.html" title="About">About</a>
-        <a class="link dim white dib" href="https://instagram.com/holgastreet" title="Contact">Contact</a>
-      </nav>
-    </header>
-    {{#rolls}}
-      <section class="pl2">
-        {{#theme}}
-        <h1 class="mb0 mt4 f4 tc-ns fwb ttu tracked">{{ theme }}</h1>
-        {{/theme}}
-        <h2 class="mb1 mt1 f5 tc-ns fw1 ttl">{{ pretty_name }}</h2>
-        {{#description}}
-        <div class="cf">
-          <div class="fl w-25-ns">&nbsp;</div>
-          <div class="fl w-50-ns">
-            <p class="lh-copy fw4 pl4 pr4">{{ description }}</p>
-          </div>
+{{> templates/head }}
+  <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
+    <h1 class="mb2">Holgastreet,</h1>
+    <h2 class="mt0 tracked fw1">Washington, DC</h2>
+    <h3 class="mv1 f4 fw1">Real film, real (crappy) camera.</h3>
+    <nav class="mt2 f6 fw6 ttu tracked pt2 bt tc b--gray">
+      <a class="link dim white dib mr3" href="/about.html" title="About">About</a>
+      <a class="link dim white dib" href="https://instagram.com/holgastreet" title="Contact">Contact</a>
+    </nav>
+  </header>
+  {{#rolls}}
+    <section class="pl2">
+      {{#theme}}
+      <h1 class="mb0 mt4 f4 tc-ns fwb ttu tracked">{{ theme }}</h1>
+      {{/theme}}
+      <h2 class="mb1 mt1 f5 tc-ns fw1 ttl">{{ pretty_name }}</h2>
+      {{#description}}
+      <div class="cf">
+        <div class="fl w-25-ns">&nbsp;</div>
+        <div class="fl w-50-ns">
+          <p class="lh-copy fw4 pl4 pr4">{{ description }}</p>
         </div>
-        {{/description}}
-        {{#sleeves}}
-          <div class="cf">
-            {{#pictures}}
-              <div class="fl w-third pa2">
-                <a href="/photos/{{slug}}.html">
-                  <img alt="Small photo of {{title}}" src="/images/holgastreet/{{name}}/{{ thumb_url }}" class="w-100">
-                </a>
-              </div>
-            {{/pictures}}
-          </div>
-        {{/sleeves}}
-      </section>
-      {{/rolls}}
-      <footer class="tc mv0 pt1 pb2 pl2 pr2 fw2">
-        Copyright David Copeland. See <a class="black fw4" href="/about.html#license">the about page for license information</a>.
-      </footer>
-  </body>
-</html>
+      </div>
+      {{/description}}
+      {{#sleeves}}
+        <div class="cf">
+          {{#pictures}}
+            <div class="fl w-third pa2">
+              <a href="/photos/{{slug}}.html">
+                <img alt="Small photo of {{title}}" src="/images/holgastreet/{{name}}/{{ thumb_url }}" class="w-100">
+              </a>
+            </div>
+          {{/pictures}}
+        </div>
+      {{/sleeves}}
+    </section>
+    {{/rolls}}
+    <footer class="tc mv0 pt1 pb2 pl2 pr2 fw2">
+      Copyright David Copeland. See <a class="black fw4" href="/about.html#license">the about page for license information</a>.
+    </footer>
+{{> templates/tail }}
