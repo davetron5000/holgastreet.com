@@ -1,0 +1,35 @@
+{{> templates/head }}
+  <header class="tc mv0 pt1 pb2 pl2 pr2 bg-near-black washed-blue">
+    <h1 class="mb2"><a class="no-underline washed-blue" href="/">Holgastreet,</a></h1>
+    <h2 class="mt0 tracked fw1">Washington, DC</h2>
+    <h3 class="mt1 mb3 f4 fw3">Real film, real (crappy) camera.</h3>
+    <nav class="mt2 f6 fw6 ttu tracked pt2 bt tc b--gray">
+      <a class="link dim white dib mr3" href="/about.html" title="About">About</a>
+      <a class="link dim light-silver dib mr3" href="/rolls/index.html" title="Rolls">Rolls</a>
+      <a class="link dim white dib" href="https://instagram.com/holgastreet" title="Contact">Contact</a>
+    </nav>
+  </header>
+  <section class="pl2">
+    <ul class="list pa2">
+      {{#rolls}}
+        <li class="mt3">
+          <h3 class="f4 mt0 mb1 pa0 ttu tracked fw2">
+            <a href="/rolls/{{ name }}.html" class="black link">Roll {{ roll_number }}</a>
+          </h3>
+          <h2 class="f3 mt0 pa0 ttu black">
+            <a href="/rolls/{{ name }}.html" class="black link">{{ theme }}</a>
+          </h2>
+          <div class="cf">
+            <a href="/rolls/{{ name }}.html">
+              <img nopin="nopin" class="fl w-25 pb3 pr3" src="/images/holgastreet/{{ name }}/{{ roll_image_thumb_url }}" />
+            </a>
+            <p class="lh-copy ma0">
+              {{ description }}
+            </p>
+          </div>
+        </li>
+      {{/rolls}}
+    </ul>
+    </section>
+    {{> templates/footer }}
+{{> templates/tail }}

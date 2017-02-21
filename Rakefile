@@ -10,9 +10,15 @@ end
 
 task :deploy => :site do
   fail "Must be run from root" unless Dir.exist?("site")
-  command = "aws s3 sync --profile=personal site/ s3://holgastreet.com"
-  sh(command) do |ok,res|
-    fail res.inspect unless ok
+  [
+    "--exclude=\"*.html\"                      --cache-control=\"max-age=604800\"",
+    "--exclude=\"*\"      --include=\"*.html\" --cache-control=\"max-age=3600\"",
+  ].each do |args|
+    command = "aws s3 sync #{args} --profile=personal site/ s3://holgastreet.com"
+    puts command
+    sh(command) do |ok,res|
+      fail res.inspect unless ok
+    end
   end
 end
 

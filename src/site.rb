@@ -32,27 +32,59 @@ private
   def generate_site(original_images)
     images_by_roll = original_images.group_by(&:roll_name).sort_by { |roll_name,_|
       roll_name
-    }.reverse
+    }
     copy_images_and_generate_thumbs(images_by_roll)
-    rolls = images_by_roll.map { |roll_name,images_in_roll|
+    rolls = images_by_roll.each_with_index.map { |(roll_name,images_in_roll),index|
       Roll.from_pictures_and_data(name: roll_name,
                                   data_file: @roll_data_file,
+                                  roll_number: index + 1,
                                   pictures: images_in_roll.map { |image| image.picture(@images_dir) }).tap { |roll|
                                     warn("No roll data for #{roll.name}") if roll.theme.nil? || roll.description.nil?
                                   }
-    }
-    info "Creating site/index.html"
+    }.reverse
     mkdir_p "site"
+    create_index(rolls)
+    create_roll_pages(rolls)
+    create_about
+    create_photo_pages(rolls)
+    copy_css
+  end
+
+  def create_index(rolls)
+    info "Creating site/index.html"
     File.open("site/index.html","w") do |file|
       index_template = TemplateModels::Index.new(rolls)
       index_template.template_file = @templates_dir / "index.mustache"
       file.puts index_template.render
     end
+  end
+
+  def create_roll_pages(rolls)
+    info "Creating roll pages"
+    mkdir_p "site/rolls"
+    File.open("site/rolls/index.html","w") do |file|
+      roll_index_template = TemplateModels::RollIndex.new(rolls)
+      roll_index_template.template_file = @templates_dir / "roll_index.mustache"
+      file.puts roll_index_template.render
+    end
+    rolls.each do |roll|
+      File.open("site/rolls/#{roll.name}.html","w") do |file|
+        roll_template = TemplateModels::Roll.new(roll)
+        roll_template.template_file = @templates_dir / "roll.mustache"
+        file.puts roll_template.render
+      end
+    end
+  end
+
+  def create_about
     File.open("site/about.html","w") do |file|
       about_template = TemplateModels::About.new
       about_template.template_file = @templates_dir / "about.mustache"
       file.puts about_template.render
     end
+  end
+
+  def create_photo_pages(rolls)
     info "Creating photo pages"
     rolls.each do |roll|
       roll.pictures.each do |picture|
@@ -65,6 +97,9 @@ private
         end
       end
     end
+  end
+
+  def copy_css
     info "Copying CSS"
     mkdir_p "site/css"
     cp "node_modules/tachyons/css/tachyons.min.css", "site/css"

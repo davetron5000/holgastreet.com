@@ -1,3 +1,5 @@
 require_relative 'template_models/photo'
 require_relative 'template_models/index'
 require_relative 'template_models/about'
+require_relative 'template_models/roll'
+require_relative 'template_models/roll_index'
