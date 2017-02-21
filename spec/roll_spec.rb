@@ -21,11 +21,12 @@ RSpec.describe Roll do
         end
 
         pictures = [ instance_double(Picture) ]
-        roll = Roll.from_pictures_and_data(name: roll_name, pictures: pictures, data_file: dir + "/rolls.json")
+        roll = Roll.from_pictures_and_data(name: roll_name, pictures: pictures, data_file: dir + "/rolls.json", roll_number: 1)
 
         expect(roll.name).to eq(roll_name)
         expect(roll.pictures).to eq(pictures)
         expect(roll.theme).to eq("cats")
+        expect(roll.roll_number).to eq(1)
         expect(roll.description).to eq("The cats of the atlas district! #catlasdistrict :)")
       end
     end
@@ -45,11 +46,12 @@ RSpec.describe Roll do
 
         roll_name = "2013-03-01"
         pictures = [ instance_double(Picture) ]
-        roll = Roll.from_pictures_and_data(name: roll_name, pictures: pictures, data_file: dir + "/rolls.json")
+        roll = Roll.from_pictures_and_data(name: roll_name, pictures: pictures, data_file: dir + "/rolls.json", roll_number: 1)
 
         expect(roll.name).to eq(roll_name)
         expect(roll.pictures).to eq(pictures)
         expect(roll.theme).to be_nil
+        expect(roll.roll_number).to eq(1)
         expect(roll.description).to be_nil
       end
     end
