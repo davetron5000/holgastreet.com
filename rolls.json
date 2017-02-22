@@ -3,7 +3,7 @@
     {
       "name": "2017-02-05",
       "theme": "Places I Love",
-      "description": "These are some of my favorite places in and around H Street, mostly restaurants.  Having moved from Logan Circle, I love the less-fussy more casual cuture out here."
+      "description": "These are some of my favorite places in and around H Street, mostly restaurants.  Having moved from Logan Circle, I love the less-fussy more casual culture out here."
     },
     {
       "name": "2017-01-29",
@@ -14,6 +14,12 @@
       "name":"2016-09-17",
       "theme":"H Street Festival",
       "description":"The annual H Street Festival!  I look forward to every year now :)"
+    },
+    {
+      "name":"2017-02-12",
+      "theme":"Building Art",
+      "draft": true,
+      "description": "H St has a lot of colorful 'art' on the sides of buildings, around alleys, and on garage doors.  It's much more colorful than other D.C. Neighborhoods and is something you immediately notice being in the neighborhood.  None of it is true 'street art', but it adds character to the neighborhood that I always enjoy seeing."
     }
   ]
 }
