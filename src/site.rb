@@ -41,6 +41,10 @@ private
                                   pictures: images_in_roll.map { |image| image.picture(@images_dir) }).tap { |roll|
                                     warn("No roll data for #{roll.name}") if roll.theme.nil? || roll.description.nil?
                                   }
+    }.reject { |roll|
+      roll.draft?.tap { |draft|
+        info "Skipping #{roll.name} as it's just a draft" if draft
+      }
     }.reverse
     mkdir_p "site"
     create_index(rolls)
@@ -48,6 +52,7 @@ private
     create_about
     create_photo_pages(rolls)
     copy_css
+    copy_static_html
   end
 
   def create_index(rolls)
@@ -103,6 +108,13 @@ private
     info "Copying CSS"
     mkdir_p "site/css"
     cp "node_modules/tachyons/css/tachyons.min.css", "site/css"
+  end
+
+  def copy_static_html
+    info "Copying Static HTML"
+    Dir["html/*"].each do |file|
+      cp file,"site"
+    end
   end
 
   def copy_images_and_generate_thumbs(images_by_roll)

@@ -14,6 +14,7 @@ RSpec.describe Roll do
               {
                 "name": roll_name,
                 "theme": "cats",
+                "draft": true,
                 "description": "The cats of the atlas district! #catlasdistrict :)",
               },
             ]
@@ -25,6 +26,7 @@ RSpec.describe Roll do
 
         expect(roll.name).to eq(roll_name)
         expect(roll.pictures).to eq(pictures)
+        expect(roll.draft?).to eq(true)
         expect(roll.theme).to eq("cats")
         expect(roll.roll_number).to eq(1)
         expect(roll.description).to eq("The cats of the atlas district! #catlasdistrict :)")
