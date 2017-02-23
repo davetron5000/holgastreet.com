@@ -7,6 +7,7 @@ require_relative "template_models"
 require_relative "logging"
 require_relative "image_detector"
 require_relative "roll_directories_builder"
+require_relative "atom_feed"
 
 class Site
   include FileUtils
@@ -53,6 +54,7 @@ private
     create_photo_pages(rolls)
     copy_css
     copy_static_html
+    make_atom_feed(rolls)
   end
 
   def create_index(rolls)
@@ -114,6 +116,12 @@ private
     info "Copying Static HTML"
     Dir["html/*"].each do |file|
       cp file,"site"
+    end
+  end
+
+  def make_atom_feed(rolls)
+    File.open("site/atom.xml","w") do |file|
+      AtomFeed.new(rolls).write_feed(file)
     end
   end
 

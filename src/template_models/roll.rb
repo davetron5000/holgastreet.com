@@ -8,7 +8,7 @@ module TemplateModels
       @roll = roll
     end
 
-    def_delegators :@roll, :name, :pictures, :theme, :description, :roll_number, :sleeves, :pretty_name
+    def_delegators :@roll, :name, :pictures, :theme, :description, :roll_number, :sleeves, :pretty_name, :roll_image_thumb_url
 
   end
 end

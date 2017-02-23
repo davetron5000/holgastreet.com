@@ -10,7 +10,7 @@ module TemplateModels
       @picture = picture
     end
 
-    def_delegators :@picture, :url, :thumb_url, :taken_on_pretty, :film_type, :iso, :coordinate, :description
+    def_delegators :@picture, :url, :thumb_url, :taken_on_pretty, :film_type, :iso, :coordinate, :description, :title
 
   end
 end

@@ -13,6 +13,7 @@ task :deploy => :site do
   [
     "--exclude=\"*.html\"                      --cache-control=\"max-age=604800\"",
     "--exclude=\"*\"      --include=\"*.html\" --cache-control=\"max-age=3600\"",
+    "--exclude=\"*\"      --include=\"*.xml\" --cache-control=\"max-age=3600\"",
   ].each do |args|
     command = "aws s3 sync #{args} --profile=personal site/ s3://holgastreet.com"
     puts command
