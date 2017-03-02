@@ -46,7 +46,7 @@ private
       roll.draft?.tap { |draft|
         info "Skipping #{roll.name} as it's just a draft" if draft
       }
-    }.reverse
+    }.sort_by(&:name).reverse
     mkdir_p "site"
     create_index(rolls)
     create_roll_pages(rolls)
