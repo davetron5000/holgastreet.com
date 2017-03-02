@@ -24,7 +24,7 @@ class OriginalImage
                    end
     @roll_name ||= begin
                        keywords = exif_data["Keywords"]
-                       keywords = keywords.to_s.split(/,/) unless keywords.kind_of?(Array)
+                       keywords = keywords.to_s.split(/,/).map(&:strip) unless keywords.kind_of?(Array)
                        keywords.select { |keyword|
                          keyword =~ /^roll:/
                        }.map { |roll_keywords|
