@@ -46,7 +46,7 @@ task :prep, [:rollname,:skips] do |t,args|
       film = $stdin.gets.chomp
       puts "ISO?"
       iso = $stdin.gets.chomp
-      command = "exiftool -Make=\"#{film}\" -ISO=#{iso} -Model=\"Holga 120N\" -Keywords=\"holga, Holgastreet roll:#{rollname}\" -Subject=\"holga, Holgastreet roll:#{rollname}\" *.jpeg"
+      command = "exiftool -Make=\"#{film}\" -ISO=#{iso} -Model=\"Holga 120N\" -Keywords=\"holga, Holgastreet, roll:#{rollname}\" -Subject=\"holga, Holgastreet, roll:#{rollname}\" *.jpeg"
       unless system(command)
         fail "Problem running '#{command}'"
       end
