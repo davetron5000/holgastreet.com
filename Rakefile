@@ -3,6 +3,28 @@ require "site"
 require "rspec/core/rake_task"
 require "fileutils"
 require "webrick"
+require "geocoder"
+
+task :geo do
+  Geocoder.configure(
+
+    # street address geocoding service (default :nominatim)
+    lookup: :google,
+
+    # IP address geocoding service (default :ipinfo_io)
+    ip_lookup: :maxmind,
+
+    # to use an API key:
+    api_key: "AIzaSyC49BbOlp3T7G5agxBNbk69STOG2Pqu1dY",
+
+    # geocoding service request timeout, in seconds (default 3):
+    timeout: 5,
+
+      # set default units to kilometers:
+      units: :mi,
+  )
+  puts Geocoder.search("1432 F St, NE, Washington, DC").first.coordinates
+end
 
 task :site do
   Site.new.build!
