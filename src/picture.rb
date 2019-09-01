@@ -10,6 +10,10 @@ Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long
       nil_like_values = [ '', also_considered_nil ].compact
       nil_like_values.include?(string.to_s.strip) ? nil : string.strip
     }
+    taken_on = exif_data["CreateDate"]
+    if taken_on.to_s.strip == ""
+      raise "#{file} didn't contain exif data for 'CreateDate', which is required"
+    end
     self.new(
       file: file,
       iso: exif_data["ISO"],
@@ -17,7 +21,7 @@ Picture = ImmutableStruct.new(:file, :iso, :film_type, :description, :lat, :long
       description: exif_data["Description"],
       lat: LatLongCoordinate.from_exif(exif_data["GPSLatitude"]),
       long: LatLongCoordinate.from_exif(exif_data["GPSLongitude"]),
-      taken_on: ExifTime.parse(exif_data["CreateDate"]),
+      taken_on: ExifTime.parse(taken_on),
       title: strip_to_nil.(exif_data["Title"]) || "Untitled"
     )
   end

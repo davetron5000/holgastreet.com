@@ -46,19 +46,31 @@ task :prep, [:rollname,:skips] do |t,args|
       film = $stdin.gets.chomp
       puts "ISO?"
       iso = $stdin.gets.chomp
-      command = "exiftool -Make=\"#{film}\" -ISO=#{iso} -Model=\"Holga 120N\" -Keywords=\"holga, Holgastreet, roll:#{rollname}\" -Subject=\"holga, Holgastreet, roll:#{rollname}\" *.jpeg"
+      command = "exiftool -Make=\"#{film}\" -ISO=#{iso} -Model=\"Holga 120N\" -Keywords=\"holga, Holgastreet, roll:#{rollname}\" -Subject=\"holga, Holgastreet, roll:#{rollname}\" *.jpeg *.jpg"
       unless system(command)
         fail "Problem running '#{command}'"
       end
     end
     previous_date = nil
-    Dir["*.jpeg"].each do |file|
+    Dir["*"].each do |file|
+      if file !~ /\.jpeg$/ && file !~ /\.jpg$/
+        if file =~ /_original/
+          # no message
+        else
+          puts "Skipping #{file} since it isn't a jpeg or jpg"
+        end
+        next
+      end
       puts "Fixing up #{file}"
       system("open #{file}")
       puts "When taken? #{previous_date}"
       date = $stdin.gets.chomp
       raise if date.strip == "" && previous_date.nil?
-      previous_date = date
+      if date.strip == ""
+        date = previous_date
+      else
+        previous_date = date
+      end
       date = "#{date} 12:00:00" if date =~ /^\d\d\d\d:\d\d:\d\d$/
       puts "lat/long?"
       lat_long = $stdin.gets.chomp
