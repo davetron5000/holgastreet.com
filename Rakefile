@@ -31,9 +31,9 @@ task :serve do
   WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Pathname(Dir.pwd) / "site").start
 end
 
-task :prep, [:rollname,:skips] do |t,args|
-  rollname = args[:rollname]
-  skips = (args[:skips] || "").split(/,/)
+task :prep do
+  puts "What is the name of your rolle? (ideally use a date YYYY-MM-DD)"
+  rollname = $stdin.gets.chomp
 
   FileUtils.mkdir_p "original_images/#{rollname}"
   chdir "original_images/#{rollname}" do
@@ -41,15 +41,13 @@ task :prep, [:rollname,:skips] do |t,args|
     $stdin.gets
     puts "Rename files and move to original_images/#{rollname}/.  Hit Return when done."
     $stdin.gets
-    unless skips.include?("film")
-      puts "Film?"
-      film = $stdin.gets.chomp
-      puts "ISO?"
-      iso = $stdin.gets.chomp
-      command = "exiftool -Make=\"#{film}\" -ISO=#{iso} -Model=\"Holga 120N\" -Keywords=\"holga, Holgastreet, roll:#{rollname}\" -Subject=\"holga, Holgastreet, roll:#{rollname}\" *.jpeg *.jpg"
-      unless system(command)
-        fail "Problem running '#{command}'"
-      end
+    puts "Film Brand and Type (e.g. Kodak T-Max)?"
+    film = $stdin.gets.chomp
+    puts "ISO?"
+    iso = $stdin.gets.chomp
+    command = "exiftool -Make=\"#{film}\" -ISO=#{iso} -Model=\"Holga 120N\" -Keywords=\"holga, Holgastreet, roll:#{rollname}\" -Subject=\"holga, Holgastreet, roll:#{rollname}\" *.jpeg *.jpg"
+    unless system(command)
+      fail "Problem running '#{command}'"
     end
     previous_date = nil
     Dir["*"].each do |file|

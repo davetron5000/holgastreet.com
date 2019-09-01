@@ -1,0 +1,79 @@
+#!/usr/bin/env ruby
+
+require "methadone"
+require "fileutils"
+
+class App
+  include Methadone::Main
+  include Methadone::CLILogging
+
+
+  main do |*images|
+    images = images.map { |image|
+      "\"#{image}\""
+    }
+    output_dir = options["output"] || exit_now!("--output is required")
+
+    date = options["date"] || exit_now!("--date is required")
+    date = "#{date} 12:00:00" unless date =~ /\d\d:\d\d:\d\d$/
+
+    rollname = options["roll"] || exit_now!("--roll is required")
+
+    lat,long = options["gps"].to_s.split(/[\s,]/,2)
+
+    exiftool_args = {
+      "Make"                 => options["film"],
+      "ISO"                  => options["iso"],
+      "Model"                => "Holga 120N",
+      "Keywords"             => "holga, Holgastreet, roll:#{rollname}",
+      "Subject"              => "holga, Holgastreet, roll:#{rollname}",
+      "exif:gpslatituderef"  => "N",
+      "exif:gpslongituderef" => "W",
+      "exif:gpslatitude"     => lat || "FILL",
+      "exif:gpslongitude"    => long || "FILL",
+      "Title"                => options["title"].to_s.gsub(/\"/,"'"),
+      "Description"          => options["description"].to_s.gsub(/\"/,"'"),
+      "AllDates"             => date,
+    }.map { |k,v|
+      if v.to_s.strip != ""
+        [k,v.strip]
+      else
+        nil
+      end
+    }.compact.map { |k,v|
+      "-#{k}=\"#{v}\""
+    }.join(" \\\n    ")
+
+    FileUtils.mkdir_p output_dir
+
+    command = "exiftool -o \"#{output_dir}\" #{exiftool_args}"
+
+    images.each do |image|
+      puts "#{command} \\\n  #{image}"
+      puts
+    end
+
+    puts "# Get Lat/Long from here:"
+    puts "# https://www.latlong.net/convert-address-to-lat-long.html"
+    puts
+  end
+
+  on("--roll ROLL_NAME", "Name of this roll, ideally the date in YYYY-MM-DD of the week it was taken")
+  on("--film FILM", "Brand and Type of Film, e.g. Kodak T-Max")
+  on("--iso ISO", "ISO of the film")
+  on("--date DATE", "Date when the photos were taken in YYYY-MM-DD format")
+  on("--gps LAT_LONG", "Lat/Long where the photo was taken, in format LAT,LONG")
+  on("--title TITLE", "Title of this photo")
+  on("--description DESC", "Description of this photo")
+  on("--output DIR", "Where to write the file when done")
+
+  version "Over 9000"
+
+  leak_exceptions true
+
+  description "Add EXIF metadata to images for proper hosting"
+
+  arg :images, :many, "List of images to process"
+
+  go!
+end
