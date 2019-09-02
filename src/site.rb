@@ -13,12 +13,12 @@ class Site
   include FileUtils
   include Logging
 
-  def initialize
+  def initialize(rolls_filename = "rolls.json")
     @image_detector = ImageDetector.new(Pathname.new(Dir.pwd) / "original_images")
     @images_dir = Pathname.new(Dir.pwd) / "site" / "images" / "holgastreet"
     @roll_directories_builder = RollDirectoriesBuilder.new(@images_dir)
     @templates_dir = Pathname.new(Dir.pwd) / "templates"
-    @roll_data_file = Pathname.new(Dir.pwd) / "rolls.json"
+    @roll_data_file = Pathname.new(Dir.pwd) / rolls_filename
   end
 
   def build!
@@ -36,12 +36,18 @@ private
     }
     copy_images_and_generate_thumbs(images_by_roll)
     rolls = images_by_roll.each_with_index.map { |(roll_name,images_in_roll),index|
-      Roll.from_pictures_and_data(name: roll_name,
-                                  data_file: @roll_data_file,
-                                  roll_number: index + 1,
-                                  pictures: images_in_roll.map { |image| image.picture(@images_dir) }).tap { |roll|
-                                    warn("No roll data for #{roll.name}") if roll.theme.nil? || roll.description.nil?
-                                  }
+      Roll.from_pictures_and_data(
+        name: roll_name,
+        data_file: @roll_data_file,
+        roll_number: index + 1,
+        pictures: images_in_roll.map { |image|
+          image.picture(@images_dir)
+        }.sort_by { |picture|
+          picture.slug
+        }
+      ).tap { |roll|
+        warn("No roll data for #{roll.name}") if roll.theme.nil? || roll.description.nil?
+      }
     }.reject { |roll|
       roll.draft?.tap { |draft|
         info "Skipping #{roll.name} as it's just a draft" if draft
@@ -94,11 +100,21 @@ private
   def create_photo_pages(rolls)
     info "Creating photo pages"
     rolls.each do |roll|
-      roll.pictures.each do |picture|
+      roll.pictures.each_with_index do |picture, index|
+        next_picture_url = if index >= (roll.pictures.size - 1)
+                             nil
+                           else
+                             "/photos/" + roll.pictures[index + 1].slug + ".html"
+                           end
+        previous_picture_url = if index == 0
+                                 nil
+                               else
+                                 "/photos/" + roll.pictures[index - 1].slug + ".html"
+                               end
         path = Pathname("site") / "photos" / (picture.slug + ".html")
         mkdir_p path.parent
         File.open(path,"w") do |file|
-          template = TemplateModels::Photo.new(roll,picture)
+          template = TemplateModels::Photo.new(roll, picture, previous_picture_url, next_picture_url)
           template.template_file = @templates_dir / "photo.mustache"
           file.puts template.render
         end

@@ -15,10 +15,32 @@
       <img nopin="nopin" alt="Photo of {{title}}" src="/images/holgastreet/{{ roll_name }}/{{ thumb_url }}" class="db center mw-100">
     </a>
     <div>
+      <nav class="cf bg-dark-gray near-white pa3 ph7-ns">
+        <div class="fl w-50 ttl fw3 tracked">
+          {{#previous_picture_url}}
+            <a href="{{ previous_picture_url }}" class="link near-white">
+              &larr; <span class="underline">Previous</span>
+            </a>
+          {{/previous_picture_url}}
+          {{^previous_picture_url}}
+            &nbsp;
+          {{/previous_picture_url}}
+        </div>
+        <div class="fr tr w-50 ttl fw3 tracked">
+          {{#next_picture_url}}
+            <a href="{{ next_picture_url }}" class="link near-white">
+              <span class="underline">Next</span> &rarr;
+            </a>
+          {{/next_picture_url}}
+          {{^next_picture_url}}
+            &nbsp;
+          {{/next_picture_url}}
+        </div>
+      </nav>
       <div class="cf pa3-ns">
         <div class="fl w-25-ns dn db-ns">&nbsp;</div>
         <div class="fl w-50-ns w-100 pa3">
-          <p class="lh-copy mt1-ns mv0 f4">
+          <p class="lh-copy mt1-ns mv0 f4 fw3">
             {{ description }}
           </p>
           <h1 class="f6 mb2 tc ttu tracked fwb near-black">{{ taken_on_pretty }}</h1>
