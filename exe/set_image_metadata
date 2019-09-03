@@ -31,8 +31,8 @@ class App
       "exif:gpslongituderef" => "W",
       "exif:gpslatitude"     => lat || "FILL",
       "exif:gpslongitude"    => long || "FILL",
-      "Title"                => options["title"].to_s.gsub(/\"/,"'"),
-      "Description"          => options["description"].to_s.gsub(/\"/,"'"),
+      "Title"                => (options["title"] || "FILL").to_s.gsub(/\"/,"'"),
+      "Description"          => (options["description"] || "FILL").to_s.gsub(/\"/,"'"),
       "AllDates"             => date,
     }.map { |k,v|
       if v.to_s.strip != ""
@@ -71,7 +71,7 @@ class App
 
   leak_exceptions true
 
-  description "Add EXIF metadata to images for proper hosting"
+  description "Outputs exiftool commands to add EXIF metadata to images for proper hosting"
 
   arg :images, :many, "List of images to process"
 
