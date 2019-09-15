@@ -26,6 +26,7 @@ task :geo do
   puts Geocoder.search("Maui, HI").first.coordinates
 end
 
+desc "Build the site locally"
 task :site do
   rolls_filename = if ENV["DEV"] == "true"
                      "rolls-dev.json"
@@ -35,6 +36,7 @@ task :site do
   Site.new(rolls_filename).build!
 end
 
+desc "Deploy site to AWS"
 task :deploy => :site do
   fail "Must be run from root" unless Dir.exist?("site")
   [
@@ -54,6 +56,7 @@ RSpec::Core::RakeTask.new(:spec)
 
 task :default => [ :spec, :site ]
 
+desc "Serve the site locally (does not build)"
 task :serve do
   WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Pathname(Dir.pwd) / "site").start
 end
