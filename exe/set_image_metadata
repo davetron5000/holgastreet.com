@@ -10,7 +10,10 @@ class App
 
   main do |*images|
     images = images.map { |image|
-      "\"#{image}\""
+      [
+        "\"#{image}\"",
+        "\"#{image.gsub(/\.png$/,'.jpg')}\"",
+      ]
     }
     output_dir = options["output"] || exit_now!("--output is required")
 
@@ -46,10 +49,14 @@ class App
 
     FileUtils.mkdir_p output_dir
 
+    convert_command = "convert -quality 100 "
     command = "exiftool -o \"#{output_dir}\" #{exiftool_args}"
 
-    images.each do |image|
-      puts "#{command} \\\n  #{image}"
+    images.each do |png_image, jpg_image|
+      if png_image != jpg_image
+        puts "#{convert_command} #{png_image} #{jpg_image}"
+      end
+      puts "#{command} \\\n  #{jpg_image}"
       puts
     end
 
