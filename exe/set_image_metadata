@@ -24,20 +24,21 @@ class App
 
     lat,long = options["gps"].to_s.split(/[\s,]/,2)
 
-    exiftool_args = {
-      "Make"                 => options["film"],
-      "ISO"                  => options["iso"],
-      "Model"                => "Holga 120N",
-      "Keywords"             => "holga, Holgastreet, roll:#{rollname}",
-      "Subject"              => "holga, Holgastreet, roll:#{rollname}",
-      "exif:gpslatituderef"  => "N",
-      "exif:gpslongituderef" => "W",
-      "exif:gpslatitude"     => lat || "FILL",
-      "exif:gpslongitude"    => long || "FILL",
-      "Title"                => (options["title"] || "FILL").to_s.gsub(/\"/,"'"),
-      "Description"          => (options["description"] || "FILL").to_s.gsub(/\"/,"'"),
-      "AllDates"             => date,
-    }.map { |k,v|
+    exiftool_args = [
+      ["Make"                 , options["film"]],
+      ["ISO"                  , options["iso"]],
+      ["Model"                , "Holga 120N"],
+      ["Keywords"             , "holga"],
+      ["Keywords"             , "Holgastreet"],
+      ["Keywords"             , "roll:#{rollname}"],
+      ["exif:gpslatituderef"  , "N"],
+      ["exif:gpslongituderef" , "W"],
+      ["exif:gpslatitude"     , lat || "FILL"],
+      ["exif:gpslongitude"    , long || "FILL"],
+      ["Title"                , (options["title"] || "FILL").to_s.gsub(/\"/,"'")],
+      ["Description"          , (options["description"] || "FILL").to_s.gsub(/\"/,"'")],
+      ["AllDates"             , date],
+    ].map { |k,v|
       if v.to_s.strip != ""
         [k,v.strip]
       else
