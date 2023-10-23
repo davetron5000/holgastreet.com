@@ -4,8 +4,7 @@ Static Site Generator for [holgastreet.com](holgastreet.com).
 
 ## How This Works
 
-The files in `original_images` are expected to have EXIF data set so that we can tell what roll they are a part of and all that other
-stuff.  The images are the database.  The only data *not* in the images is in `rolls.json`, which contains metadata about a given roll.
+The files in `original_images` are expected to have EXIF data set so that we can tell what roll they are a part of and all that other stuff.  The images are the database.  The only data *not* in the images is in `rolls.json`, which contains metadata about a given roll.  **Do not delete `original_images`**
 
 So the basic workflow is:
 
@@ -25,3 +24,14 @@ So the basic workflow is:
 
 * Scan at 3000+ DPI
 * For Holga film, Descreening, Backlight Correction, and Unsharp Mask do absolutely nothing.
+
+## Lightroom Notes
+
+In exported files:
+
+* Good:
+  - True - Picked
+  - False - Rejected
+  - omitted means neither Picked nor Rejected
+* Rating: 1-5 of star rating
+ 
